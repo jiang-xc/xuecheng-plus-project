@@ -21,7 +21,7 @@ public class ContentCodeGenerator {
 	//数据库账号
 	private static final String DATA_SOURCE_USER_NAME  = "root";
 	//数据库密码
-	private static final String DATA_SOURCE_PASSWORD  = "mysql";
+	private static final String DATA_SOURCE_PASSWORD  = "root";
 	//生成的表
 	private static final String[] TABLE_NAMES = new String[]{
 //			"mq_message",
@@ -50,8 +50,8 @@ public class ContentCodeGenerator {
 		GlobalConfig gc = new GlobalConfig();
 		gc.setFileOverride(true);
 		//生成路径
-		gc.setOutputDir(System.getProperty("user.dir") + "/xuecheng-plus-generator/src/main/java");
-		gc.setAuthor("itcast");
+		gc.setOutputDir(System.getProperty("user.dir") + "/xuecheng-plus-parent/xuecheng-plus-generator/src/main/java");
+		gc.setAuthor("jiangxc");
 		gc.setOpen(false);
 		gc.setSwagger2(false);
 		gc.setServiceName("%sService");
@@ -67,8 +67,9 @@ public class ContentCodeGenerator {
 		// 数据库配置
 		DataSourceConfig dsc = new DataSourceConfig();
 		dsc.setDbType(DbType.MYSQL);
-		dsc.setUrl("jdbc:mysql://192.168.101.65:3306/xc402_" + SERVICE_NAME
-				+ "?serverTimezone=UTC&useUnicode=true&useSSL=false&characterEncoding=utf8");
+		/*dsc.setUrl("jdbc:mysql://192.168.200.130:3306/xczx_" + SERVICE_NAME
+				+ "?serverTimezone=UTC&useUnicode=true&useSSL=false&characterEncoding=utf8");*/
+		dsc.setUrl("jdbc:mysql://192.168.200.130:3306/xczx?serverTimezone=UTC&useUnicode=true&useSSL=false&characterEncoding=utf8");
 //		dsc.setDriverName("com.mysql.jdbc.Driver");
 		dsc.setDriverName("com.mysql.cj.jdbc.Driver");
 		dsc.setUsername(DATA_SOURCE_USER_NAME);

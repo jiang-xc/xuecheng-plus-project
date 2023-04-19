@@ -1,0 +1,9 @@
+### Send POST request with json body
+POST http://localhost:10010/content/course/base?pageNo=1&pageSize=2
+Content-Type: application/json
+
+{
+  "courseName": "java",
+  "auditStatus": "202004",
+  "publishStatus": ""
+}

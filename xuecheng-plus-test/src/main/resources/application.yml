@@ -1,0 +1,8 @@
+server:
+  port: 10086
+swagger:
+  title: "学成在线内容管理系统"
+  description: "内容系统管理系统对课程相关信息进行管理"
+  base-package: com.jiang
+  enabled: true
+  version: 1.0.0
