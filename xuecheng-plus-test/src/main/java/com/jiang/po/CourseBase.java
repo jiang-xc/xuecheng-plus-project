@@ -34,7 +34,7 @@ public class CourseBase implements Serializable {
     /**
      * 机构名称
      */
-    private String companyName;
+    private String companyClientName;
 
     /**
      * 课程名称
