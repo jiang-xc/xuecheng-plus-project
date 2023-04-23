@@ -7,9 +7,9 @@ public class test {
     public static void main(String[] args) {
 
 
-        CourseBaseSon courseBaseSon = new CourseBaseSon();
+        /*CourseBaseSon courseBaseSon = new CourseBaseSon();
         courseBaseSon.setId(30L);
         courseBaseSon.setCompanyName("123");
-        System.out.println(courseBaseSon);
+        System.out.println(courseBaseSon);*/
     }
 }
