@@ -6,16 +6,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xuecheng.base.exception.XueChengPlusException;
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
-import com.xuecheng.content.mapper.CourseBaseMapper;
-import com.xuecheng.content.mapper.CourseCategoryMapper;
-import com.xuecheng.content.mapper.CourseMarketMapper;
+import com.xuecheng.content.mapper.*;
 import com.xuecheng.content.model.dto.AddCourseDto;
 import com.xuecheng.content.model.dto.CourseBaseInfoDto;
 import com.xuecheng.content.model.dto.EditCourseDto;
 import com.xuecheng.content.model.dto.QueryCourseParamsDto;
-import com.xuecheng.content.model.po.CourseBase;
-import com.xuecheng.content.model.po.CourseCategory;
-import com.xuecheng.content.model.po.CourseMarket;
+import com.xuecheng.content.model.po.*;
 import com.xuecheng.content.service.CourseBaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -43,8 +39,12 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
     private CourseMarketMapper courseMarketMapper;
     @Autowired
     private CourseCategoryMapper courseCategoryMapper;
-
-
+    @Autowired
+    private TeachplanMapper teachplanMapper;
+    @Autowired
+    private TeachplanMediaMapper teachplanMediaMapper;
+    @Autowired
+    private CourseTeacherMapper courseTeacherMapper;
 
 
     public PageResult<CourseBase> queryPageByCondi(PageParams pageParams, QueryCourseParamsDto CourseParamsDto){
@@ -215,5 +215,36 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
         return getCourseBaseInfo(courseId);
     }
 
+    @Transactional
+    @Override
+    public void delCourse(Long courseId) {
+        //查询当前课程是否提交
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        //审核状态：202002：未提交
+        if("202002".equals(courseBase.getAuditStatus())){
 
+            try {
+                //删除课程基本信息
+                courseBaseMapper.deleteById(courseId);
+
+                //1.删除营销信息
+                courseMarketMapper.deleteById(courseId);
+                //2.删除课程计划
+                LambdaQueryWrapper<Teachplan> qwTeachplan = new LambdaQueryWrapper<>();
+                qwTeachplan.eq(Teachplan::getCourseId,courseId);
+                teachplanMapper.delete(qwTeachplan);
+                //2.1删除课程计划媒资信息
+                LambdaQueryWrapper<TeachplanMedia> qwTeachplanMedia = new LambdaQueryWrapper<>();
+                qwTeachplanMedia.eq(TeachplanMedia::getCourseId,courseId);
+                teachplanMediaMapper.delete(qwTeachplanMedia);
+                //3.删除课程教师信息
+                LambdaQueryWrapper<CourseTeacher> qwCourseTeacher = new LambdaQueryWrapper<>();
+                qwCourseTeacher.eq(CourseTeacher::getCourseId,courseId);
+                courseTeacherMapper.delete(qwCourseTeacher);
+            }catch (Exception e){
+                log.error("删除课程出现异常。。{}",e.getMessage());
+                XueChengPlusException.cast("删除课程出现异常。。。。");
+            }
+        }
+    }
 }

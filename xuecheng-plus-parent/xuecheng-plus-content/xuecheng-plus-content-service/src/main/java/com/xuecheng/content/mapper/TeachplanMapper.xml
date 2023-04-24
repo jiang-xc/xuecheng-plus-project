@@ -4,27 +4,109 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.xuecheng.content.model.po.Teachplan">
-        <id column="id" property="id" />
-        <result column="pname" property="pname" />
-        <result column="parentid" property="parentid" />
-        <result column="grade" property="grade" />
-        <result column="media_type" property="mediaType" />
-        <result column="start_time" property="startTime" />
-        <result column="end_time" property="endTime" />
-        <result column="description" property="description" />
-        <result column="timelength" property="timelength" />
-        <result column="orderby" property="orderby" />
-        <result column="course_id" property="courseId" />
-        <result column="course_pub_id" property="coursePubId" />
-        <result column="status" property="status" />
-        <result column="is_preview" property="isPreview" />
-        <result column="create_date" property="createDate" />
-        <result column="change_date" property="changeDate" />
+        <id column="id" property="id"/>
+        <result column="pname" property="pname"/>
+        <result column="parentid" property="parentid"/>
+        <result column="grade" property="grade"/>
+        <result column="media_type" property="mediaType"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="description" property="description"/>
+        <result column="timelength" property="timelength"/>
+        <result column="orderby" property="orderby"/>
+        <result column="course_id" property="courseId"/>
+        <result column="course_pub_id" property="coursePubId"/>
+        <result column="status" property="status"/>
+        <result column="is_preview" property="isPreview"/>
+        <result column="create_date" property="createDate"/>
+        <result column="change_date" property="changeDate"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, pname, parentid, grade, media_type, start_time, end_time, description, timelength, orderby, course_id, course_pub_id, status, is_preview, create_date, change_date
     </sql>
+
+    <resultMap id="TreeResultMap" type="com.xuecheng.content.model.dto.TeachPlanDto">
+        <id     column="one_id"        property="id" />
+        <result column="one_pname"      property="pname" />
+        <result column="one_grade"  property="grade" />
+        <result column="one_parentid"     property="parentid" />
+        <result column="one_media_type"   property="mediaType" />
+        <result column="one_start_time"   property="startTime" />
+        <result column="one_end_time"   property="endTime" />
+        <result column="one_description"   property="description" />
+        <result column="one_timelength"   property="timelength" />
+        <result column="one_orderby"   property="orderby" />
+        <result column="one_course_id"   property="courseId" />
+        <result column="one_course_pub_id"   property="coursePubId" />
+        <result column="one_status"   property="status" />
+        <result column="one_is_preview"   property="isPreview" />
+        <collection property="teachPlanTreeNodes" javaType="list" ofType="com.xuecheng.content.model.dto.TeachPlanDto">
+            <id     column="two_id"        property="id" />
+            <result column="two_pname"      property="pname" />
+            <result column="two_grade"  property="grade" />
+            <result column="two_parentid"     property="parentid" />
+            <result column="two_media_type"   property="mediaType" />
+            <result column="two_start_time"   property="startTime" />
+            <result column="two_end_time"   property="endTime" />
+            <result column="two_description"   property="description" />
+            <result column="two_timelength"   property="timelength" />
+            <result column="two_orderby"   property="orderby" />
+            <result column="two_course_id"   property="courseId" />
+            <result column="two_course_pub_id"   property="coursePubId" />
+            <result column="two_status"   property="status" />
+            <result column="two_is_preview"   property="isPreview" />
+            <association property="teachplanMedia" javaType="com.xuecheng.content.model.po.TeachplanMedia">
+                <id column="med_id" property="id"/>
+                <result column="med_media_id"      property="mediaId" />
+                <result column="two_id"      property="teachplanId" />
+                <result column="two_course_id"      property="courseId" />
+                <result column="med_media_fileName"      property="mediaFilename" />
+                <result column="create_date"      property="createDate" />
+                <result column="create_people"      property="createPeople" />
+                <result column="change_people"      property="changePeople" />
+            </association>
+        </collection>
+    </resultMap>
+
+
+    <select id="findTeachplanTree" resultMap="TreeResultMap">
+
+         SELECT
+	one.id one_id,              two.id two_id,
+	one.pname one_pname,		two.pname two_pname,
+	one.grade one_grade,		two.grade two_grade,
+	one.parentid one_parentid,	two.parentid two_parentid,
+	one.media_type one_media_type,	two.media_type two_media_type,
+	one.start_time one_start_time,	two.start_time two_start_time,
+	one.end_time one_end_time,	two.end_time two_end_time,
+	one.description one_description,two.description two_description,
+	one.timelength one_timelength,	two.timelength two_timelength,
+	one.orderby one_orderby,	two.orderby two_orderby,
+	one.course_id one_course_id,	two.course_id two_course_id,
+	one.course_pub_id one_course_pub_id,	two.course_pub_id two_course_pub_id,
+	one.status one_status,		two.status two_status,
+	one.is_preview one_is_preview,	two.is_preview two_is_preview,
+
+	med.`id` med_id,
+	med.`media_id` med_media_id,
+	med.`media_fileName` med_media_fileName,
+	med.`create_date` med_create_date,
+	med.`create_people` createPeople,
+	med.`change_people` changePeople
+
+FROM teachplan one LEFT JOIN teachplan two ON one.id = two.`parentid`
+LEFT JOIN teachplan_media med ON med.teachplan_id = two.id
+WHERE one.parentid=0 AND one.course_id=#{courseId}
+ORDER BY one.orderby,two.orderby
+    </select>
+
+
+    <select id="countChildNodes" resultType="java.lang.Integer">
+
+    SELECT COUNT(1) FROM teachplan WHERE parentid=#{id};
+
+    </select>
 
 </mapper>
