@@ -8,6 +8,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.security.InvalidKeyException;
@@ -40,10 +41,10 @@ public class MinioTest {
 
         //上传文件的参数信息
         UploadObjectArgs uploadObjectArgs = UploadObjectArgs.builder()
-                .bucket("testbucket")//桶
+                .bucket("video")//桶
                 .filename("C:\\Users\\Administrator\\Pictures\\Camera Roll\\123.jpg") //指定本地文件路径
 //                .object("1.mp4")//对象名 在桶下存储该文件
-                .object("")//对象名 放在子目录下
+                .object("test.jpg")//对象名 放在子目录下
                 .contentType(mimeType)//设置媒体文件类型
                 .build();
 
@@ -104,7 +105,13 @@ public class MinioTest {
     }
 
 
-
+    @Test
+    public void test(){
+        String str = "hello.jpg";
+        String strConcat = str + 99199;
+        System.out.println(str.substring(0,1)+"||"+str.substring(1,2));
+        System.out.println(str.substring(str.lastIndexOf(".")));
+    }
 
 
 
