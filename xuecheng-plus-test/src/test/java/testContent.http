@@ -1,5 +1,5 @@
 ### Send POST request with json body
-POST http://localhost:10010/content/course/base?pageNo=1&pageSize=2
+POST {{gateway_host}}/content/course/list?pageNo=1&pageSize=2
 Content-Type: application/json
 
 {
@@ -52,3 +52,12 @@ Content-Type: application/json
   "price": 110
 }
 
+
+### 课程查询列表
+POST {{gateway_host}}/content/course/list?pageNo=2&pageSize=1
+Content-Type: application/json
+
+{
+  "auditStatus": "202002",
+  "courseName": ""
+}
