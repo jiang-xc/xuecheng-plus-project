@@ -1,5 +1,8 @@
+import com.xuecheng.base.exception.XueChengPlusException;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -52,15 +55,34 @@ public class MyCommonTest {
         }).limit(3).map(i -> i + 2).collect(Collectors.toList());
         System.out.println(list1);
 
-        list.stream().map(i->i.concat("hello")).forEach(System.out::println);
+        list.stream().map(i -> i.concat("hello")).forEach(System.out::println);
 
     }
 
     @Test
-    public void test02(){
-        String str = "hh";
-        System.out.println(str.concat("123"));
+    public void test02() throws IOException {
+        File tempFile = File.createTempFile("minio", ".temp");
+        //filedata.transferTo(tempFile);
+        System.out.println(tempFile);
     }
+
+
+    @Test
+    public void test03() {
+        System.out.println("11111111111111");
+
+        if (0 == 1) {
+
+            XueChengPlusException.cast("异常信息出现了，，，");
+            //return;
+        }
+        System.out.println("==============");
+        System.out.println("222222222222222222222");
+
+        int i = Runtime.getRuntime().availableProcessors();
+        System.out.println(i);
+    }
+
 
 
 }

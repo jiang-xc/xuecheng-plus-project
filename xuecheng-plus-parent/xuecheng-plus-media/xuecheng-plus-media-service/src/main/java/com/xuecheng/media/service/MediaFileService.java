@@ -10,6 +10,7 @@ import com.xuecheng.media.model.po.MediaFiles;
 import io.minio.UploadObjectArgs;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public interface MediaFileService {
   * @author Mr.M
   * @date 2022/9/10 8:57
  */
- public PageResult<MediaFiles> queryMediaFiels(Long companyId,PageParams pageParams, QueryMediaParamsDto queryMediaParamsDto);
+ public PageResult<MediaFiles> queryMediaFiles(Long companyId,PageParams pageParams, QueryMediaParamsDto queryMediaParamsDto);
 
  /**
   * 上传文件
@@ -52,5 +53,18 @@ public interface MediaFileService {
 
 
  public RestResponse<Boolean> mergechunks(Long companyId, String fileMd5, int chunkTotal,UploadFileParamsDto uploadFileParamsDto);
+
+ public File downloadFileFromMinIO(String bucket, String objectName);
+
+ /**
+  * 将文件上传到minio
+  *
+  * @param localFilePath 文件本地路径
+  * @param mimeType      媒体类型
+  * @param bucket        桶
+  * @param objectName    对象名
+  * @return
+  */
+ public boolean addMediaFilesToMinIO(String localFilePath, String mimeType, String bucket, String objectName);
 
 }
