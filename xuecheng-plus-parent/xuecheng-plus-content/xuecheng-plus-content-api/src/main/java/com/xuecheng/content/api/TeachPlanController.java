@@ -1,7 +1,10 @@
 package com.xuecheng.content.api;
 
+import com.xuecheng.content.mapper.TeachplanMediaMapper;
+import com.xuecheng.content.model.dto.BindTeachplanMediaDto;
 import com.xuecheng.content.model.dto.SaveOrUpdateTeachPlanDto;
 import com.xuecheng.content.model.dto.TeachPlanDto;
+import com.xuecheng.content.service.TeachplanMediaService;
 import com.xuecheng.content.service.TeachplanService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,8 @@ public class TeachPlanController {
 
     @Autowired
     TeachplanService teachplanService;
+    @Autowired
+    TeachplanMediaService teachplanMediaService;
 
 
     @ApiOperation("查询课程计划树形结构")
@@ -54,6 +59,19 @@ public class TeachPlanController {
     public void moveTeachPlan(@PathVariable("moveMode") String moveMode, @PathVariable("id") Long id){
 
         teachplanService.moveTeachPlan(moveMode,id);
+    }
+
+
+    @ApiOperation(value = "课程计划和媒资信息绑定")
+    @PostMapping("/teachplan/association/media")
+    public void associationMedia(@RequestBody BindTeachplanMediaDto bindTeachplanMediaDto){
+        teachplanMediaService.associationMedia(bindTeachplanMediaDto);
+    }
+
+
+    @DeleteMapping("/teachplan/association/media/{teachPlanId}/{mediaId}")
+    public void delMediaByTeachPlanIdAndMediaId(@PathVariable("teachPlanId")Long teachPlanId,@PathVariable("mediaId") String mediaId){
+        teachplanMediaService.delMediaByTeachPlanIdAndMediaId(teachPlanId,mediaId);
     }
 
 }
