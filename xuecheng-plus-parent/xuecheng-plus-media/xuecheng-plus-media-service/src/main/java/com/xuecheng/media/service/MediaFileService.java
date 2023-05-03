@@ -21,6 +21,10 @@ import java.util.List;
  */
 public interface MediaFileService {
 
+
+
+ public MediaFiles getFileById(String mediaId);
+
  /**
   * @description 媒资文件查询方法
   * @param pageParams 分页参数

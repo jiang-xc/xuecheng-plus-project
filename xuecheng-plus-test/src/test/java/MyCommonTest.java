@@ -1,3 +1,4 @@
+import com.jiang.po.CourseBase;
 import com.xuecheng.base.exception.XueChengPlusException;
 import org.junit.jupiter.api.Test;
 
@@ -81,6 +82,15 @@ public class MyCommonTest {
 
         int i = Runtime.getRuntime().availableProcessors();
         System.out.println(i);
+    }
+
+    @Test
+    public void test04() {
+
+        //XueChengPlusException.cast("111111");
+
+        CourseBase courseBase = null;
+        //System.out.println(courseBase.getAuditStatus());
     }
 
 
