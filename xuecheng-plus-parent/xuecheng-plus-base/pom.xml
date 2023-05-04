@@ -64,10 +64,10 @@
             <artifactId>simplemagic</artifactId>
             <version>1.17</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
