@@ -1,9 +1,12 @@
 import com.jiang.po.CourseBase;
 import com.xuecheng.base.exception.XueChengPlusException;
+import javafx.util.converter.LocalDateTimeStringConverter;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -13,6 +16,8 @@ import java.util.stream.Stream;
 
 public class MyCommonTest {
 
+    @Autowired
+    private LocalDateTimeStringConverter localDateTimeStringConverter;
 
     @Test
     public void test01() {
@@ -91,6 +96,13 @@ public class MyCommonTest {
 
         CourseBase courseBase = null;
         //System.out.println(courseBase.getAuditStatus());
+    }
+
+
+    @Test
+    public void test05(){
+        System.out.println("2023-05-04 00:19:34");
+        System.out.println(LocalDateTime.now());
     }
 
 

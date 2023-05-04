@@ -26,4 +26,12 @@ public interface CoursePublishService extends IService<CoursePublish> {
      * @date 2022/9/18 10:31
      */
     public void commitAudit(Long companyId,Long courseId);
+
+
+    /**
+     * 课程发布
+     * @param companyId 企业/机构Id
+     * @param courseId 课程Id
+     */
+    public void coursePublish(Long companyId,Long courseId);
 }

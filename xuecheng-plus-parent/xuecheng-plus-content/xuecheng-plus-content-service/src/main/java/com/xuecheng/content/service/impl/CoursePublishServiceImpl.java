@@ -46,6 +46,8 @@ public class CoursePublishServiceImpl extends ServiceImpl<CoursePublishMapper, C
     private CourseMarketMapper courseMarketMapper;
     @Autowired
     private CoursePublishPreMapper coursePublishPreMapper;
+    @Autowired
+    private CoursePublishMapper coursePublishMapper;
 
 
 
@@ -122,6 +124,56 @@ public class CoursePublishServiceImpl extends ServiceImpl<CoursePublishMapper, C
         //更新课程基本表的审核状态
         courseBase.setAuditStatus("202003");
         courseBaseMapper.updateById(courseBase);
+    }
+
+    @Override
+    public void coursePublish(Long companyId, Long courseId) {
+        //约束校验
+        //查询课程预发布表
+        CoursePublishPre publishPre = coursePublishPreMapper.selectById(courseId);
+        if(publishPre==null){
+            XueChengPlusException.cast("课程不存在，请先提交审核。。。");
+        }
+
+        //本机构只允许提交本机构的课程
+        if(!publishPre.getCompanyId().equals(companyId)){
+            XueChengPlusException.cast("只允许提交本机构的课程。。。");
+        }
+
+        //课程审核状态
+        if(!"202004".equals(publishPre.getStatus())){
+            XueChengPlusException.cast("请先提交审核之后，再发布");
+        }
+
+        /*
+         *保存课程发布信息
+         */
+        CoursePublish coursePublish = new CoursePublish();
+        BeanUtils.copyProperties(publishPre,coursePublish);
+        //发布状态设置为已发布
+        coursePublish.setStatus("203002");
+        coursePublish.setCreateDate(LocalDateTime.now());
+        CoursePublish coursePublishUpdate = coursePublishMapper.selectById(courseId);
+        if(coursePublishUpdate == null){
+            coursePublishMapper.insert(coursePublish);
+        }else{
+            coursePublishMapper.updateById(coursePublish);
+        }
+        //更新课程信息表
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        courseBase.setStatus("203002");
+        courseBaseMapper.updateById(courseBase);
+        //保存消息表
+        saveCoursePublishMessage(courseId);
+
+        //删除课程预发布表对应记录
+        coursePublishPreMapper.deleteById(courseId);
+
+    }
+
+    private void saveCoursePublishMessage(Long courseId){
+
+
     }
 
 
