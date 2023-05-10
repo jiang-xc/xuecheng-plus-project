@@ -10,6 +10,7 @@ import com.xuecheng.content.model.dto.QueryCourseParamsDto;
 import com.xuecheng.content.model.po.CourseBase;
 import com.xuecheng.content.service.CourseBaseService;
 import com.xuecheng.content.service.impl.CourseBaseServiceImpl;
+import com.xuecheng.content.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,9 @@ public class CourseBaseInfoController {
     public CourseBaseInfoDto getCourseBaseById(@PathVariable Long courseId){
         /*Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println(principal);*/
-
+        SecurityUtil.XcUser user = SecurityUtil.getUser();
+        System.out.println(user);
+        System.out.println(user.getUsername());
         return courseBaseService.getCourseBaseInfo(courseId);
     }
 

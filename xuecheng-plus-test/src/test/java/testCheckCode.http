@@ -1,0 +1,11 @@
+Plain Text
+### 申请验证码
+POST {{checkcode_host}}/checkcode/pic
+
+
+
+Bash
+### 校验验证码
+POST {{checkcode_host}}/checkcode/verify?key=checkcode:a910891ba699436fab73526ed22ef62c&code=Y40C
+
+
