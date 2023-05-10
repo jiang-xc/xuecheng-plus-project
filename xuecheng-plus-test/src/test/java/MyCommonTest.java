@@ -1,13 +1,16 @@
 import com.jiang.po.CourseBase;
 import com.xuecheng.base.exception.XueChengPlusException;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
@@ -103,6 +106,13 @@ public class MyCommonTest {
     public void test05(){
         System.out.println("2023-05-04 00:19:34");
         System.out.println(LocalDateTime.now());
+    }
+
+    @Test
+    public void test06(){
+        Date date = new Date(1683646284L*1000);
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(date);
     }
 
 

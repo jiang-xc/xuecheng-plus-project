@@ -30,5 +30,7 @@ Content-Type: application/json
 GET {{search_host}}/search/course/list?pageNo=1&keywords=spring
 Content-Type: application/json
 
+###
+GET http://www.51xuecheng.cn/api/search/course/list?pageNo=1&pageSize=3&keywords=
 
 ###
