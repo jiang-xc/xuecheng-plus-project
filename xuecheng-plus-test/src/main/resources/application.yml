@@ -6,3 +6,5 @@ swagger:
   base-package: com.jiang
   enabled: true
   version: 1.0.0
+logging:
+  config: classpath:log4j2-dev.xml

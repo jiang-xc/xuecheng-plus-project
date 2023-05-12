@@ -1,26 +1,23 @@
+package com.jiang.test;
+
 import com.jiang.po.CourseBase;
 import com.xuecheng.base.exception.XueChengPlusException;
-import javafx.util.converter.LocalDateTimeStringConverter;
-import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.function.Consumer;
+import java.util.*;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
+//@SpringBootTest
 public class MyCommonTest {
 
-    @Autowired
-    private LocalDateTimeStringConverter localDateTimeStringConverter;
 
     @Test
     public void test01() {
@@ -103,18 +100,94 @@ public class MyCommonTest {
 
 
     @Test
-    public void test05(){
+    public void test05() {
         System.out.println("2023-05-04 00:19:34");
         System.out.println(LocalDateTime.now());
     }
 
     @Test
-    public void test06(){
-        Date date = new Date(1683646284L*1000);
+    public void test06() {
+        Date date = new Date(1683646284L * 1000);
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println(date);
     }
 
+
+    @Test
+    public void test07() {
+        String[] strings = new String[10];
+        strings[0] = "aaa";
+        strings[1] = "bbb";
+        strings[2] = "ccc";
+        strings[3] = "ddd";
+        strings[4] = "eee";
+        List<String> arrayList = new ArrayList<>();
+        arrayList.add("mmm");
+        arrayList.add("nnn");
+        arrayList.add("vvv");
+        arrayList.add("ccc");
+        arrayList.add("xxx");
+        String[] strings1 = arrayList.toArray(new String[0]);
+        System.out.println(Arrays.toString(strings));
+        System.out.println("strings111" + Arrays.toString(strings1));
+
+    }
+
+
+    @Test
+    public void test08() {
+        //List<String> list = new ArrayList<>();
+
+        List<String> list = null;
+        /*if (list == null) {
+            System.out.println("list列表不存在");
+        }*/
+
+        if (list != null && list.size() > 0) {
+            //System.out.println("list列表不存在或list内部元素为0");
+            System.out.println("111111111111");
+        }
+
+        /*if(CollectionUtils.isEmpty(list)){
+            System.out.println("list列表不存在或list内部元素为0");
+        }*/
+    }
+
+
+    @Test
+    public void test09() {
+        //Map<String, String> map = new HashMap<>();
+        Map<String, String> map = null;
+
+        /*if (map == null || map.size() == 0) {
+            System.out.println("map为null或者map中没有元素");
+        }*/
+
+        if (map != null && map.size() > 0) {
+            System.out.println("map为null或者map中没有元素");
+        }
+    }
+
+    @Test
+    public void test10() {
+       if("123".equals("123")){
+           System.out.println(111);
+       }else if(2>0) {
+           System.out.println(222);
+       }
+    }
+
+
+    @Test
+    public void test11(){
+
+        Random random = new Random();
+        //生成一个0到8999之间的随机整数，再加上1000，就可以得到一个4位随机数字
+        int randomNumber = random.nextInt(9000) + 1000;
+        String randomString = String.valueOf(randomNumber);
+        System.out.println("随机生成的4位数字是：" + randomString);
+
+    }
 
 
 }

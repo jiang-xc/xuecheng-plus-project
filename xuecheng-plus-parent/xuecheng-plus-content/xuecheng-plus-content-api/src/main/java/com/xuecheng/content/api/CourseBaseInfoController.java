@@ -14,6 +14,7 @@ import com.xuecheng.content.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,23 +35,30 @@ public class CourseBaseInfoController {
     private CourseBaseService courseBaseService;
 
 
+    @PreAuthorize("hasAuthority('xc_teachmanager_course_list')")
     @PostMapping("/course/list")
-    public PageResult<CourseBase> queryCourseInfoByPage(PageParams pageParams, @RequestBody QueryCourseParamsDto queryCourseParamsDto){
+    public PageResult<CourseBase> queryCourseInfoByPage(PageParams pageParams, @RequestBody QueryCourseParamsDto queryCourseParamsDto) {
+        SecurityUtil.XcUser xcUser = SecurityUtil.getUser();
+        Long companyId = null;
+        if (!StringUtils.isEmpty(xcUser.getCompanyId())) {
+            companyId = Long.parseLong(xcUser.getCompanyId());
+        }
 
-        if(pageParams.getPageNo()==null||pageParams.getPageNo()==0L){
+
+        if (pageParams.getPageNo() == null || pageParams.getPageNo() == 0L) {
             pageParams.setPageNo(1L);
         }
 
-        if(pageParams.getPageSize()==null||pageParams.getPageSize()==0L){
+        if (pageParams.getPageSize() == null || pageParams.getPageSize() == 0L) {
             pageParams.setPageSize(5L);
         }
 
-        return courseBaseService.queryPageByCondi(pageParams, queryCourseParamsDto);
+        return courseBaseService.queryPageByCondi(companyId, pageParams, queryCourseParamsDto);
     }
 
 
     @PostMapping("/course")
-    public CourseBaseInfoDto addCourseBaseInfoAndMarketInfo(@RequestBody @Validated({ValidationGroups.Inster.class}) AddCourseDto addCourseDto){
+    public CourseBaseInfoDto addCourseBaseInfoAndMarketInfo(@RequestBody @Validated({ValidationGroups.Inster.class}) AddCourseDto addCourseDto) {
         Long companyId = 1232141425L;
         CourseBaseInfoDto courseBaseInfoDto = courseBaseService.addCourseBaseInfoAndMarketInfo(companyId, addCourseDto);
 
@@ -58,7 +66,7 @@ public class CourseBaseInfoController {
     }
 
     @GetMapping("/course/{courseId}")
-    public CourseBaseInfoDto getCourseBaseById(@PathVariable Long courseId){
+    public CourseBaseInfoDto getCourseBaseById(@PathVariable Long courseId) {
         /*Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println(principal);*/
         SecurityUtil.XcUser user = SecurityUtil.getUser();
@@ -69,7 +77,7 @@ public class CourseBaseInfoController {
 
 
     @PutMapping("/course")
-    public CourseBaseInfoDto updateCourseBase(@RequestBody @Validated({ValidationGroups.Update.class}) EditCourseDto editCourseDto){
+    public CourseBaseInfoDto updateCourseBase(@RequestBody @Validated({ValidationGroups.Update.class}) EditCourseDto editCourseDto) {
         Long companyId = 1232141425L;
         CourseBaseInfoDto courseBaseInfoDto = courseBaseService.updateCourseBase(companyId, editCourseDto);
         return courseBaseInfoDto;
@@ -77,10 +85,11 @@ public class CourseBaseInfoController {
 
     /**
      * 删除课程及其相关项
+     *
      * @param courseId
      */
     @DeleteMapping("/course/{courseId}")
-    public void delCourse(@PathVariable Long courseId){
+    public void delCourse(@PathVariable Long courseId) {
         courseBaseService.delCourse(courseId);
     }
 

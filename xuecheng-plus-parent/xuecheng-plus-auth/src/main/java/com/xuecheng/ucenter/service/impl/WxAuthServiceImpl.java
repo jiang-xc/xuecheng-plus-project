@@ -40,10 +40,9 @@ public class WxAuthServiceImpl implements AuthService, WxAuthService {
     private WxAuthServiceImpl currentProxy;
 
 
-
     @Value("${weixin.appid}")
     private String appid;
-    @Value("${weixin.appid}")
+    @Value("${weixin.secret}")
     private String secret;
 
 
@@ -75,7 +74,7 @@ public class WxAuthServiceImpl implements AuthService, WxAuthService {
         String openid = access_token_map.get("openid");
         String access_token = access_token_map.get("access_token");
         Map<String, String> userinfo = getUserinfo(access_token, openid);
-        if(userinfo==null){
+        if (userinfo == null) {
             return null;
         }
 
@@ -106,6 +105,7 @@ public class WxAuthServiceImpl implements AuthService, WxAuthService {
 
     /**
      * 通过从微信返回的令牌来获取用户信息
+     *
      * @param access_token
      * @param openid
      * @return
@@ -130,11 +130,11 @@ public class WxAuthServiceImpl implements AuthService, WxAuthService {
 
 
     @Transactional
-    public XcUser addWxUser(Map userInfo_map){
+    public XcUser addWxUser(Map userInfo_map) {
         String unionid = userInfo_map.get("unionid").toString();
         //根据unionid查询数据库
         XcUser xcUser = xcUserMapper.selectOne(new LambdaQueryWrapper<XcUser>().eq(XcUser::getWxUnionid, unionid));
-        if(xcUser!=null){
+        if (xcUser != null) {
             return xcUser;
         }
         String userId = UUID.randomUUID().toString();

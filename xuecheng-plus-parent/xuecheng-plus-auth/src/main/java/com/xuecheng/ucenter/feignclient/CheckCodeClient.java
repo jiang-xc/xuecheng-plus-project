@@ -11,4 +11,7 @@ public interface CheckCodeClient {
 
     @PostMapping(value = "/checkcode/verify")
     public Boolean verify(@RequestParam("key")String key, @RequestParam("code")String code);
+
+    @PostMapping("/checkcode/sms/verify")
+    public Boolean toverifySmsCode(@RequestParam("key")String key, @RequestParam("code")String code);
 }

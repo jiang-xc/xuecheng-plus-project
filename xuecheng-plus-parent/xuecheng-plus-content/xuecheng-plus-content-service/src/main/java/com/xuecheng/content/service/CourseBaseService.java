@@ -20,7 +20,7 @@ import com.xuecheng.content.model.po.CourseBase;
 public interface CourseBaseService extends IService<CourseBase> {
 
 
-    public PageResult<CourseBase> queryPageByCondi(PageParams pageParams, QueryCourseParamsDto CourseParamsDto);
+    public PageResult<CourseBase> queryPageByCondi(Long companyId,PageParams pageParams, QueryCourseParamsDto CourseParamsDto);
 
     public CourseBaseInfoDto addCourseBaseInfoAndMarketInfo(Long companyId,AddCourseDto addCourseDto);
 

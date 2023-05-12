@@ -47,7 +47,7 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
     private CourseTeacherMapper courseTeacherMapper;
 
 
-    public PageResult<CourseBase> queryPageByCondi(PageParams pageParams, QueryCourseParamsDto CourseParamsDto){
+    public PageResult<CourseBase> queryPageByCondi(Long companyId,PageParams pageParams, QueryCourseParamsDto CourseParamsDto){
 
         //分页条件数据
         Page<CourseBase> page = new Page<>(pageParams.getPageNo(),pageParams.getPageSize());
@@ -60,7 +60,8 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
         queryWrapper.eq(StringUtils.isNotEmpty(CourseParamsDto.getAuditStatus()),CourseBase::getAuditStatus,CourseParamsDto.getAuditStatus());
         //发布状态
         queryWrapper.eq(StringUtils.isNotEmpty(CourseParamsDto.getPublishStatus()),CourseBase::getStatus,CourseParamsDto.getPublishStatus());
-
+        //机构id
+        queryWrapper.eq(companyId!=null,CourseBase::getCompanyId,companyId);
         Page<CourseBase> courseBasePage = courseBaseMapper.selectPage(page, queryWrapper);
 
         PageResult<CourseBase> pageResult = new PageResult<>(courseBasePage.getRecords(),courseBasePage.getTotal(),courseBasePage.getPages(),courseBasePage.getSize());

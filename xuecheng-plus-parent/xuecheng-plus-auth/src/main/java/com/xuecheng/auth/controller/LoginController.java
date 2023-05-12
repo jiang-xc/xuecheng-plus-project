@@ -1,13 +1,14 @@
 package com.xuecheng.auth.controller;
 
+import com.xuecheng.base.model.RestResponse;
 import com.xuecheng.ucenter.mapper.XcUserMapper;
+import com.xuecheng.ucenter.model.dto.SmsCodeParamsDto;
 import com.xuecheng.ucenter.model.po.XcUser;
+import com.xuecheng.ucenter.service.UserInfoSerive;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Mr.M
@@ -21,6 +22,8 @@ public class LoginController {
 
     @Autowired
     XcUserMapper userMapper;
+    @Autowired
+    private UserInfoSerive userInfoSerive;
 
 
     @RequestMapping("/login-success")
@@ -49,6 +52,24 @@ public class LoginController {
     public String r2() {
         return "访问r2资源";
     }
+
+
+    @PostMapping("/register")
+    public RestResponse<Boolean> register(@RequestBody SmsCodeParamsDto smsCodeParamsDto){
+        userInfoSerive.register(smsCodeParamsDto);
+        return new RestResponse<>();
+    }
+
+    /**
+     *
+     * @return
+     */
+    @PostMapping("/findpassword")
+    public RestResponse<Boolean> findPasswdByPhone(@RequestBody SmsCodeParamsDto smsCodeParamsDto){
+        userInfoSerive.findPassword(smsCodeParamsDto);
+        return new RestResponse<>();
+    }
+
 
 
 
