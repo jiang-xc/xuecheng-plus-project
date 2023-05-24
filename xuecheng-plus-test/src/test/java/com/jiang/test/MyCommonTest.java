@@ -190,4 +190,35 @@ public class MyCommonTest {
     }
 
 
+    @Test
+    public void test12(){
+
+        List<String> arrayList = new ArrayList<>();
+        arrayList.add("eee");
+        arrayList.add("aaa");
+        arrayList.add("bbb");
+        arrayList.add("ccc");
+        arrayList.add("ddd");
+
+
+        System.out.println(arrayList.get(2));
+
+    }
+
+
+
+    @Test
+    public void test13() throws InterruptedException {
+
+        LocalDateTime beforeTime = LocalDateTime.now();
+        System.out.println("beforeTime:"+beforeTime);
+        Thread.sleep(5000);
+        System.out.println();
+        LocalDateTime nowTime = LocalDateTime.now();
+        System.out.println("nowTime:"+nowTime);
+        if(beforeTime.isBefore(nowTime)){
+            System.out.println("1111");
+        }
+
+    }
 }
