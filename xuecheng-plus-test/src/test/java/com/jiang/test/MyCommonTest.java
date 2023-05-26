@@ -170,16 +170,16 @@ public class MyCommonTest {
 
     @Test
     public void test10() {
-       if("123".equals("123")){
-           System.out.println(111);
-       }else if(2>0) {
-           System.out.println(222);
-       }
+        if ("123".equals("123")) {
+            System.out.println(111);
+        } else if (2 > 0) {
+            System.out.println(222);
+        }
     }
 
 
     @Test
-    public void test11(){
+    public void test11() {
 
         Random random = new Random();
         //生成一个0到8999之间的随机整数，再加上1000，就可以得到一个4位随机数字
@@ -191,7 +191,7 @@ public class MyCommonTest {
 
 
     @Test
-    public void test12(){
+    public void test12() {
 
         List<String> arrayList = new ArrayList<>();
         arrayList.add("eee");
@@ -206,19 +206,40 @@ public class MyCommonTest {
     }
 
 
-
     @Test
     public void test13() throws InterruptedException {
 
         LocalDateTime beforeTime = LocalDateTime.now();
-        System.out.println("beforeTime:"+beforeTime);
+        System.out.println("beforeTime:" + beforeTime);
         Thread.sleep(5000);
         System.out.println();
         LocalDateTime nowTime = LocalDateTime.now();
-        System.out.println("nowTime:"+nowTime);
-        if(beforeTime.isBefore(nowTime)){
+        System.out.println("nowTime:" + nowTime);
+        if (beforeTime.isBefore(nowTime)) {
             System.out.println("1111");
         }
 
+    }
+
+
+    @Test
+    public void test14() {
+        int a = 10;
+        int b = 20;
+        if(a<=b){
+            System.out.println("a<=b"+true);
+        }
+
+        if(a<b){
+            System.out.println("a<b"+true);
+        }
+    }
+
+    @Test
+    public void test15() {
+        Float a = 1.11F*100;
+        Float b = 2.99F*100;
+        System.out.println(a.intValue());
+        System.out.println(b.intValue());
     }
 }

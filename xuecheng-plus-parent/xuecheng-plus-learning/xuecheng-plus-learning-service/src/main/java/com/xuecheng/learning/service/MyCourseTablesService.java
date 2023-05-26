@@ -2,6 +2,8 @@ package com.xuecheng.learning.service;
 
 import com.xuecheng.learning.model.dto.XcChooseCourseDto;
 import com.xuecheng.learning.model.dto.XcCourseTablesDto;
+import com.xuecheng.learning.model.po.XcChooseCourse;
+import com.xuecheng.learning.model.po.XcCourseTables;
 
 public interface MyCourseTablesService {
 
@@ -24,5 +26,13 @@ public interface MyCourseTablesService {
      * @date 2022/10/3 7:37
      */
     public XcCourseTablesDto getLearningStatus(String userId, Long courseId);
+
+
+    /**
+     * 保存收费课程到我的课程表
+     * @param chooseCourseId
+     * @return
+     */
+    public boolean saveChooseCourseSuccess(String chooseCourseId);
 
 }

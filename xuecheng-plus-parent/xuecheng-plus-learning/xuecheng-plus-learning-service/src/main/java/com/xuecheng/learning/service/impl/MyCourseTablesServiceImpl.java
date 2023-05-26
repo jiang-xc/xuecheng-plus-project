@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 import java.time.LocalDateTime;
@@ -92,8 +94,44 @@ public class MyCourseTablesServiceImpl implements MyCourseTablesService {
         }
     }
 
+    @Override
+    @Transactional
+    public boolean saveChooseCourseSuccess(String chooseCourseId) {
+
+        //根据choosecourseId查询选课记录
+        XcChooseCourse xcChooseCourse = xcChooseCourseMapper.selectById(chooseCourseId);
+        if(xcChooseCourse == null){
+            log.debug("收到支付结果通知没有查询到关联的选课记录,choosecourseId:{}",chooseCourseId);
+            return false;
+        }
+        String status = xcChooseCourse.getStatus();
+        if("701001".equals(status)){
+            //添加到课程表
+            addCourseTables(xcChooseCourse);
+            return true;
+        }
+        //待支付状态才处理
+        if ("701002".equals(status)) {
+            //更新为选课成功
+            xcChooseCourse.setStatus("701001");
+            int update = xcChooseCourseMapper.updateById(xcChooseCourse);
+            if(update>0){
+                log.debug("收到支付结果通知处理成功,选课记录:{}",xcChooseCourse);
+                //添加到课程表
+                addCourseTables(xcChooseCourse);
+                return true;
+            }else{
+                log.debug("收到支付结果通知处理失败,选课记录:{}",xcChooseCourse);
+                return false;
+            }
+        }
+
+        return false;
+    }
+
 
     //添加免费课程,免费课程加入选课记录表、我的课程表
+    @Transactional
     public XcChooseCourse addFreeCoruse(String userId, CoursePublish coursepublish) {
         //查询选课记录表是否存在免费的且选课成功的订单
         LambdaQueryWrapper<XcChooseCourse> queryWrapper = new LambdaQueryWrapper<>();
@@ -125,7 +163,8 @@ public class MyCourseTablesServiceImpl implements MyCourseTablesService {
         return null;
     }
 
-    //添加收费课程
+    //添加收费课程到选课记录表
+    @Transactional
     public XcChooseCourse addChargeCoruse(String userId,CoursePublish coursepublish){
         //如果存在待支付记录直接返回
         LambdaQueryWrapper<XcChooseCourse> queryWrapper = new LambdaQueryWrapper<>();
@@ -158,6 +197,7 @@ public class MyCourseTablesServiceImpl implements MyCourseTablesService {
 
 
     //添加到我的选课表
+    @Transactional
     public XcCourseTables  addCourseTables(XcChooseCourse xcChooseCourse){
         //选课记录完成且未过期可以添加课程到课程表
         String status = xcChooseCourse.getStatus();
