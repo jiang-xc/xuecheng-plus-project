@@ -2,17 +2,19 @@ package com.xuecheng.media;
 
 import com.j256.simplemagic.ContentInfo;
 import com.j256.simplemagic.ContentInfoUtil;
-import io.minio.*;
-import io.minio.errors.*;
+import io.minio.GetObjectArgs;
+import io.minio.MinioClient;
+import io.minio.RemoveObjectArgs;
+import io.minio.UploadObjectArgs;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.io.*;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilterInputStream;
 
 /**
  * @author Mr.M
