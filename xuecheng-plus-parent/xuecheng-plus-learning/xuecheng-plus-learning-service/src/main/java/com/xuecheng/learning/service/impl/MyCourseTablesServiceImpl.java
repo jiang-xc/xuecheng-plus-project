@@ -1,17 +1,21 @@
 package com.xuecheng.learning.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xuecheng.base.exception.XueChengPlusException;
+import com.xuecheng.base.model.PageResult;
 import com.xuecheng.content.model.po.CoursePublish;
 import com.xuecheng.learning.feignclient.ContentServiceClient;
 import com.xuecheng.learning.mapper.XcChooseCourseMapper;
 import com.xuecheng.learning.mapper.XcCourseTablesMapper;
+import com.xuecheng.learning.model.dto.MyCourseTableParams;
 import com.xuecheng.learning.model.dto.XcChooseCourseDto;
 import com.xuecheng.learning.model.dto.XcCourseTablesDto;
 import com.xuecheng.learning.model.po.XcChooseCourse;
 import com.xuecheng.learning.model.po.XcCourseTables;
 import com.xuecheng.learning.service.MyCourseTablesService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -127,6 +131,32 @@ public class MyCourseTablesServiceImpl implements MyCourseTablesService {
         }
 
         return false;
+    }
+
+    @Override
+    public PageResult<XcCourseTables> queryAllCourseTable(String userId,MyCourseTableParams myCourseTableParams) {
+        LambdaQueryWrapper<XcCourseTables> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(XcCourseTables::getUserId,userId);
+        int currPage = myCourseTableParams.getPage();
+        if(currPage==0){
+            currPage = 1;
+        }
+        int pageSize = myCourseTableParams.getSize();
+        if(pageSize == 0){
+            pageSize = 5;
+        }
+
+        //封装分页参数
+        Page<XcCourseTables> page = new Page<>();
+        page.setCurrent(currPage);
+        page.setSize(pageSize);
+        Page<XcCourseTables> xcCourseTablesPage = xcCourseTablesMapper.selectPage(page, queryWrapper);
+        long counts = xcCourseTablesPage.getTotal();
+        List<XcCourseTables> records = xcCourseTablesPage.getRecords();
+
+        PageResult<XcCourseTables> pageResult = new PageResult<>(records,counts,currPage,pageSize);
+
+        return pageResult;
     }
 
 

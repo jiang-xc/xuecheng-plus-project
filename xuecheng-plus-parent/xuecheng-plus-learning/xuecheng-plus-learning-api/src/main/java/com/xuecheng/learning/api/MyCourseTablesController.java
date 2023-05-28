@@ -11,11 +11,13 @@ import com.xuecheng.learning.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 /**
  * @author Mr.M
@@ -58,10 +60,19 @@ public class MyCourseTablesController {
 
     }
 
+
+
     @ApiOperation("我的课程表")
     @GetMapping("/mycoursetable")
-    public PageResult<XcCourseTables> mycoursetable(MyCourseTableParams params) {
-        return null;
+    public PageResult<XcCourseTables> queryAllCourseTable(MyCourseTableParams myCourseTableParams){
+        String userId = SecurityUtil.getUser().getId();
+        //String userId = myCourseTableParams.getUserId();
+        if(StringUtils.isEmpty(userId)){
+            XueChengPlusException.cast("请先登录");
+        }
+
+        //courseTablesService
+       return courseTablesService.queryAllCourseTable(userId,myCourseTableParams);
     }
 
 }

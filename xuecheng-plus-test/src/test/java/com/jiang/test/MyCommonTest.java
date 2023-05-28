@@ -242,4 +242,18 @@ public class MyCommonTest {
         System.out.println(a.intValue());
         System.out.println(b.intValue());
     }
+
+
+    @Test
+    public void test16() {
+        Float a = 1.11F*100;
+        Float b = 2.99F*100;
+        //System.out.println(a.intValue());
+        //System.out.println(b.intValue());
+        /*if(true){
+            return;
+        }*/
+
+        System.out.println("111");
+    }
 }
