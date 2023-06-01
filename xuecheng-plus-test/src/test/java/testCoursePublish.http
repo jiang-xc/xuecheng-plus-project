@@ -34,4 +34,5 @@ Content-Type: application/json
 GET http://www.51xuecheng.cn/api/search/course/list?pageNo=1&pageSize=3&keywords=
 
 ### 通过课程id查询课程发布信息
-GET {{content_host}}/content/r/coursepublish/121
+GET http://127.0.0.1:10010/content/course/whole/300
+

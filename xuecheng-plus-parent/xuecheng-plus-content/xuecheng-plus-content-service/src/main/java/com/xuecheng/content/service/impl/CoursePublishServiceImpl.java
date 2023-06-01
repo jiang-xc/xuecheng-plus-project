@@ -28,6 +28,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
@@ -41,6 +42,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -69,6 +71,8 @@ public class CoursePublishServiceImpl extends ServiceImpl<CoursePublishMapper, C
     private MqMessageService mqMessageService;
     @Autowired
     private MediaServiceClient mediaServiceClient;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     @Override
@@ -256,6 +260,34 @@ public class CoursePublishServiceImpl extends ServiceImpl<CoursePublishMapper, C
     @Override
     public CoursePublish getCoursePublish(Long courseId) {
         CoursePublish coursePublish = coursePublishMapper.selectById(courseId);
+        return coursePublish;
+    }
+
+    @Override
+    public CoursePublish getCoursePublishCache(Long courseId) {
+        //cacheObj是一个json格式的数据
+        Object cacheObj = redisTemplate.opsForValue().get("course:" + courseId);
+        CoursePublish coursePublish;
+        if (cacheObj != null) {
+            //System.out.println("从缓存中读取");
+            String jsonString = cacheObj.toString();
+            if ("null".equals(jsonString)){
+                return null;
+            }
+
+                coursePublish = JSON.parseObject(jsonString, CoursePublish.class);
+            return coursePublish;
+        } else {
+            System.out.println("从数据库中读取");
+            //从数据库查询
+            coursePublish = coursePublishMapper.selectById(courseId);
+            //将数据加入缓存
+            //缓存空值null
+            //if (coursePublish != null) {
+            redisTemplate.opsForValue().set("course:" + courseId, JSON.toJSONString(coursePublish), 60, TimeUnit.SECONDS);
+            //}
+        }
+
         return coursePublish;
     }
 

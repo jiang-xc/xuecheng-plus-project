@@ -4,7 +4,7 @@ POST {{checkcode_host}}/checkcode/pic
 
 
 ### 申请验证码111
-POST http://127.0.0.1:63075/checkcode/pic
+POST http://www.51xuecheng.cn/api/checkcode/pic
 
 
 

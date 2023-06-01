@@ -64,4 +64,18 @@ public interface CoursePublishService extends IService<CoursePublish> {
      * @return
      */
     public CoursePublish getCoursePublish(Long courseId);
+
+
+    /**
+     * @description 查询缓存中的课程信息
+     * @param courseId
+     * @return com.xuecheng.content.model.po.CoursePublish
+     * @author Mr.M
+     * @date 2022/10/22 16:15
+     */
+    public CoursePublish getCoursePublishCache(Long courseId);
+
+
+
+
 }

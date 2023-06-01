@@ -5,6 +5,7 @@ import com.xuecheng.base.exception.XueChengPlusException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -138,6 +139,9 @@ public class MyCommonTest {
     public void test08() {
         //List<String> list = new ArrayList<>();
 
+        Float i = null;
+        System.out.println(i);
+
         List<String> list = null;
         /*if (list == null) {
             System.out.println("list列表不存在");
@@ -148,9 +152,9 @@ public class MyCommonTest {
             System.out.println("111111111111");
         }
 
-        /*if(CollectionUtils.isEmpty(list)){
+        if(CollectionUtils.isEmpty(list)){
             System.out.println("list列表不存在或list内部元素为0");
-        }*/
+        }
     }
 
 
@@ -255,5 +259,13 @@ public class MyCommonTest {
         }*/
 
         System.out.println("111");
+    }
+
+    @Test
+    public void test17() {
+        Object o = "";
+        String str = (String) o;
+
+        System.out.println(str);
     }
 }

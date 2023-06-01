@@ -56,7 +56,8 @@ public class CoursePublishController {
     @GetMapping("/course/whole/{courseId}")
     public CoursePreviewDto getCoursePublish(@PathVariable("courseId") Long courseId) {
         //查询课程发布信息
-        CoursePublish coursePublish = coursePublishService.getCoursePublish(courseId);
+        //CoursePublish coursePublish = coursePublishService.getCoursePublish(courseId);
+        CoursePublish coursePublish = coursePublishService.getCoursePublishCache(courseId);//改为从缓存获取
         //课程基本信息
         CourseBaseInfoDto courseBase = new CourseBaseInfoDto();
         BeanUtils.copyProperties(coursePublish, courseBase);
