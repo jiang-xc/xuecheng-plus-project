@@ -26,6 +26,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -73,6 +75,8 @@ public class CoursePublishServiceImpl extends ServiceImpl<CoursePublishMapper, C
     private MediaServiceClient mediaServiceClient;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private RedissonClient redissonClient;
 
 
     @Override
@@ -267,25 +271,51 @@ public class CoursePublishServiceImpl extends ServiceImpl<CoursePublishMapper, C
     public CoursePublish getCoursePublishCache(Long courseId) {
         //cacheObj是一个json格式的数据
         Object cacheObj = redisTemplate.opsForValue().get("course:" + courseId);
-        CoursePublish coursePublish;
+        CoursePublish coursePublish = null;
         if (cacheObj != null) {
             //System.out.println("从缓存中读取");
             String jsonString = cacheObj.toString();
-            if ("null".equals(jsonString)){
+            if ("null".equals(jsonString)) {
                 return null;
             }
 
-                coursePublish = JSON.parseObject(jsonString, CoursePublish.class);
+            coursePublish = JSON.parseObject(jsonString, CoursePublish.class);
             return coursePublish;
         } else {
-            System.out.println("从数据库中读取");
-            //从数据库查询
-            coursePublish = coursePublishMapper.selectById(courseId);
-            //将数据加入缓存
-            //缓存空值null
-            //if (coursePublish != null) {
-            redisTemplate.opsForValue().set("course:" + courseId, JSON.toJSONString(coursePublish), 60, TimeUnit.SECONDS);
-            //}
+
+
+            //每门课程设置一个锁
+            RLock lock = redissonClient.getLock("coursequerylock:" + courseId);
+            //获取锁
+            lock.lock();
+            //lock.lock(50,TimeUnit.SECONDS);//这里设置锁失效时间之后，watchdog线程将不启用
+            try {
+                //redisTemplate.opsForValue().setIfAbsent("a","b");
+                cacheObj = redisTemplate.opsForValue().get("course:" + courseId);
+                if (cacheObj != null) {
+                    //System.out.println("从缓存中读取");
+                    String jsonString = cacheObj.toString();
+                    if ("null".equals(jsonString)) {
+                        return null;
+                    }
+                    coursePublish = JSON.parseObject(jsonString, CoursePublish.class);
+                    return coursePublish;
+                }
+                System.out.println("从数据库中读取");
+                //Thread.sleep(300000);
+
+                //从数据库查询
+                coursePublish = coursePublishMapper.selectById(courseId);
+                //将数据加入缓存
+                //缓存空值null
+                //if (coursePublish != null) {
+                redisTemplate.opsForValue().set("course:" + courseId, JSON.toJSONString(coursePublish), 300, TimeUnit.SECONDS);
+                //}
+            } finally {
+                //释放锁
+                lock.unlock();
+            }
+
         }
 
         return coursePublish;

@@ -19,6 +19,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -150,7 +151,10 @@ public class CoursePublishTask extends MessageProcessAbstract {
         // 分片参数
         int shardIndex = XxlJobHelper.getShardIndex();
         int shardTotal = XxlJobHelper.getShardTotal();
-
+        //Thread.sleep(20000);
+        //计数器
+        //CountDownLatch countDownLatch = new CountDownLatch(1);
+        //countDownLatch.await(20,TimeUnit.SECONDS);
         log.debug("shardIndex="+shardIndex+",shardTotal="+shardTotal);
         //参数:分片序号、分片总数、消息类型、一次最多取到的任务数量、一次任务调度执行的超时时间
         process(shardIndex,shardTotal,"course_publish",30,60);

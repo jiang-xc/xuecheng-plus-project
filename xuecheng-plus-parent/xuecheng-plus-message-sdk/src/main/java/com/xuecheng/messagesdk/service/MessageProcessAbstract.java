@@ -50,7 +50,7 @@ public abstract class MessageProcessAbstract {
             List<MqMessage> messageList = mqMessageService.getMessageList(shardIndex, shardTotal,messageType, count);
             //任务个数
             int size = messageList.size();
-            log.debug("取出待处理消息"+size+"条");
+            log.info("取出待处理消息"+size+"条");
             if(size<=0){
                 return ;
             }

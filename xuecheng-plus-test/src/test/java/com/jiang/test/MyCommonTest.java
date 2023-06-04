@@ -59,7 +59,7 @@ public class MyCommonTest {
             public Integer apply(Integer integer) {
                 return ++integer;
             }
-        }).limit(3).map(i -> i + 2).collect(Collectors.toList());
+        }).limit(3).map(i -> i).collect(Collectors.toList());
         System.out.println(list1);
 
         list.stream().map(i -> i.concat("hello")).forEach(System.out::println);
@@ -102,8 +102,7 @@ public class MyCommonTest {
 
     @Test
     public void test05() {
-        System.out.println("2023-05-04 00:19:34");
-        System.out.println(LocalDateTime.now());
+        System.out.println("aa/".concat("123"));
     }
 
     @Test
@@ -263,9 +262,9 @@ public class MyCommonTest {
 
     @Test
     public void test17() {
-        Object o = "";
-        String str = (String) o;
-
-        System.out.println(str);
+        int a = 6;
+        if(a<=10){
+            System.out.println("111");
+        }
     }
 }
